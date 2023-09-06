@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.rating span {
+  color: #ffc000;
+}
+.site-container {
+  min-height: 100vh;
+}
+
+@import "./homescreen.scss";
+@import "./product.scss";
+@import "./loader.scss";
