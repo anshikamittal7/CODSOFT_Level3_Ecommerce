@@ -6,11 +6,15 @@ import Product from "../components/Product";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Helmet } from "react-helmet-async";
+import Loader from "../components/Loader";
+import MessageBox from "../components/MessageBox";
 
 function HomeScreen() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.data);
   const loading = useSelector((state) => state.products.loading);
+  const error = useSelector((state) => state.product.error);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,16 +35,19 @@ function HomeScreen() {
   return (
     <div>
       <main>
+        <Helmet>
+          <title>Ecommerce App</title>
+        </Helmet>
         <h1>Featured Products</h1>
         {loading ? (
-          <div className="loader-container">
-            <div className="loader"></div>
-          </div>
+          <Loader />
+        ) : error ? (
+          <MessageBox message={error} variant={"danger"} />
         ) : (
           <Row>
             {products.map((product) => (
               <Col key={product.slug} sm={6} md={4} lg={3} className="mb-3">
-                <Product product={product}/>
+                <Product product={product} />
               </Col>
             ))}
           </Row>
