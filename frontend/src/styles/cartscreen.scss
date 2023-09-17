@@ -5,15 +5,17 @@
   grid-template-columns: 4fr 1fr;
 
   > main {
-    padding: 0.5rem;   
+    padding: 0.5rem;
     overflow-y: auto;
     &::-webkit-scrollbar {
-      display:none;
+      display: none;
     }
-    > h1 {
-      color: $tertiary;
-      font: 300 2rem "Roboto";
-    //   padding: 0 5rem;
+    > div {
+      > Button {
+        > Link {
+          text-decoration: none;
+        }
+      }
     }
   }
 

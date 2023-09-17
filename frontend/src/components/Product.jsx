@@ -4,15 +4,27 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import React from "react";
 
-import { addToCart } from "../redux/cartSlice";
-import { useDispatch } from "react-redux";
+import { addToCart, calculateTotals } from "../redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import axios from "axios";
+
+
 
 const Product = ({ product }) => {
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
-  const addToCartHandler = () => {
-    toast.success("Added to cart");
+  const addToCartHandler = async() => {
+    const existItem = cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock < quantity) {
+      window.alert('Sorry. Product is out of stock');
+      return;
+    }
     dispatch(addToCart({ product, quantity: 1 }));
+    dispatch(calculateTotals());
+    toast.success("Added to cart");
   };
 
   return (
@@ -33,10 +45,12 @@ const Product = ({ product }) => {
               addToCartHandler({ product, quantity: 1 });
             }}
           >
-            Add to cart 
+            Add to cart
           </Button>
         ) : (
-          <Button variant="danger">Unavailable</Button>
+          <Button variant="secondary" disabled>
+            Out of stock
+          </Button>
         )}
       </Card.Body>
     </Card>

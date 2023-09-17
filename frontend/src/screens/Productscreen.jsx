@@ -23,6 +23,7 @@ import Loader from "../components/Loader";
 
 const ProductScreen = () => {
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const product = useSelector((state) => state.product.product);
   const loading = useSelector((state) => state.product.loading);
   const error = useSelector((state) => state.product.error);
@@ -41,16 +42,24 @@ const ProductScreen = () => {
     fetchData();
   }, [slug, dispatch]);
 
-  const addToCartHandler = () => {
-    toast.success("Added to cart");
-    dispatch(addToCart({ product, quantity: 1 }));
-    dispatch(calculateTotals);
+  const addToCartHandler = async () => {
+    const existItem = cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock < quantity) {
+      window.alert("Sorry. Product is out of stock");
+      return;
+    } else {
+      toast.success("Added to cart");
+      dispatch(addToCart({ product, quantity: 1 }));
+      dispatch(calculateTotals);
+    }
   };
 
   return loading ? (
     <Loader />
   ) : error ? (
-    <MessageBox message={error} variant={"danger"} />
+    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div className="productscreen">
       <Row>

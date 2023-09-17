@@ -6,7 +6,7 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
-  font-family: 'Raleway', 'sans-serif';
+  font-family: "Raleway", "sans-serif";
 }
 .rating span {
   color: #ffc000;
@@ -14,7 +14,9 @@
 .site-container {
   min-height: 100vh;
 }
-
+.small-container {
+  max-width: 600px;
+}
 .cartSize {
   position: absolute;
   background-color: red;
@@ -32,3 +34,4 @@
 @import "./loader";
 @import "./cartscreen";
 @import "mediaquery";
+@import "./checkoutseps.scss";
